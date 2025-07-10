@@ -1,12 +1,16 @@
+import os
 import json
 import requests
 import addTicket
 
 
+API_BASE_URL = os.environ.get('API_BASE_URL', 'http://localhost:58000/api/v1')
+
+
 def main():
     serviceTicket = addTicket.get_service_ticket()
 
-    api_url = "http://localhost:58000/api/v1/network-device"
+    api_url = f"{API_BASE_URL}/network-device"
 
     headers = {
         "X-Auth-Token": serviceTicket,

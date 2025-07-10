@@ -1,8 +1,11 @@
+import os
 import json
 import requests
 
+API_BASE_URL = os.environ.get('API_BASE_URL', 'http://localhost:58000/api/v1')
+
 def get_service_ticket():
-    api_url = "http://localhost:58000/api/v1/ticket"
+    api_url = f"{API_BASE_URL}/ticket"
     headers = {
         "content-type": "application/json"
     }
@@ -15,7 +18,7 @@ def get_service_ticket():
     return response_json["response"]["serviceTicket"]
 
 def main():
-    api_url = "http://localhost:58000/api/v1/ticket"
+    api_url = f"{API_BASE_URL}/ticket"
     headers = {
         "content-type": "application/json"
     }
