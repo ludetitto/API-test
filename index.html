@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Management Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Network Management Interface</h1>
+        <div class="button-group">
+            <button onclick="callPythonScript('addTicket')">Add Ticket</button>
+            <button onclick="callPythonScript('deleteTicket')">Delete Ticket</button>
+            <button onclick="callPythonScript('getNetworkDevices')">Get Network Devices</button>
+            <button onclick="callPythonScript('updateNetworkDevice')">Update Network Device</button>
+        </div>
+        <div id="response">Response will appear here...</div>
+    </div>
+
+    <script>
+        let lastResponse = null;
+        let lastRaw = '';
+
+        async function callPythonScript(scriptName) {
+            const responseDiv = document.getElementById('response');
+            responseDiv.textContent = 'Loading...';
+            try {
+                const response = await fetch(`/api/${scriptName}`);
+                const data = await response.text();
+                lastRaw = data;
+                try {
+                    lastResponse = JSON.parse(data);
+                    responseDiv.textContent = JSON.stringify(lastResponse, null, 2);
+                } catch {
+                    lastResponse = null;
+                    responseDiv.textContent = data;
+                }
+            } catch (error) {
+                responseDiv.textContent = `Error: ${error.message}`;
+                lastResponse = null;
+            }
+        }
+    </script>
+</body>
+</html>
